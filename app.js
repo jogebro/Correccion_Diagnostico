@@ -1,12 +1,11 @@
+const { MongoClient } = require("mongodb");
 const express = require("express");
-const path = require("path");
-const dotenv = require("dotenv");
-
-dotenv.config({
-  path: "./.env",
-});
+const dotenv = require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT;
 
-app.use(express.json());
+const url = process.env.MONGO_URI;
+const client = new MongoClient(url);
+
+client.connect();
+console.log("Conectado a la base de datos");
