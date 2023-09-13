@@ -5,9 +5,7 @@ class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT;
-    this.url = process.env.MONGO_URI;
-    this.client = new MongoClient(this.url);
-    this.dbname = 'farmaciaCampus';
+    this.client = new MongoClient(process.env.MONGO_URI);
     this.paths = {
       medicamentos: '/medicamentos',
     };
@@ -19,8 +17,6 @@ class Server {
   async connectDB() {
     try {
       await this.client.connect();
-      this.db = this.client.db(this.dbname);
-      console.log(this.db);
       console.log('Conectado a la base de datos');
     } catch (error) {
       console.log(error);
