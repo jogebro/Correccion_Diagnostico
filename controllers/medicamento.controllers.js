@@ -88,7 +88,9 @@ const getMedicamentosVproveedor = async (req, res) => {
   try {
     const collection = await getCollection('Compras');
     const data = await collection.find().toArray();
+
     let totales = [0, 0, 0];
+
     data.map((e) => {
       if (e.proveedor.nombre == 'ProveedorA') {
         totales[0] += e.medicamentosComprados[0].cantidadComprada;
@@ -100,13 +102,9 @@ const getMedicamentosVproveedor = async (req, res) => {
         totales[2] += e.medicamentosComprados[0].cantidadComprada;
       }
     });
-  
-    const dataComprasP = [
-      { proveedorA: totales[0] }, 
-      { proveedorB: totales[1] }, 
-      { proveedorC: totales[2] }
-    ];
-    
+
+    const dataComprasP = [{ proveedorA: totales[0] }, { proveedorB: totales[1] }, { proveedorC: totales[2] }];
+
     res.json({
       CantidadVendida: dataComprasP,
     });
@@ -115,14 +113,65 @@ const getMedicamentosVproveedor = async (req, res) => {
   }
 };
 
-const getDineroVentas = async ()=>{
+const getDineroVentas = async (req, res) => {
   try {
-    
+    const collection = await getCollection('Ventas');
+    const data = await collection
+      .aggregate([
+        {
+          $unwind: '$medicamentosVendidos',
+        },
+        {
+          $group: {
+            _id: null,
+            total: { $sum: '$medicamentosVendidos.precio' },
+          },
+        },
+      ])
+      .toArray();
+    res.json({ ventasTotales: data[0].total });
   } catch (error) {
-    
+    res.status(500).json({ error: 'No funciona :C' });
   }
+};
 
-}
+const getMedicamentosNoVendidos = async (req, res) => {
+  try {
+    const collection = await getCollection('Medicamentos');
+    const data = await collection
+      .aggregate([
+        {
+          $lookup: {
+            from: 'Ventas',
+            localField: 'nombre',
+            foreignField: 'medicamentosVendidos.nombreMedicamento',
+            as: 'diferencia',
+          },
+        },
+        {
+          $match: {
+            diferencia: [],
+          },
+        },
+      ])
+      .toArray();
+    res.json({ medicamentosNoVendidos: data });
+  } catch (error) {
+    res.status(500).json({ error: 'No funciona :C' });
+  }
+};
+
+const getMedicamentoCaro = async (req, res) => {
+  try {
+    const collection = await getCollection('Medicamentos');
+    const data = await collection.aggregate([{ $sort: { precio: -1 } }, { $limit: 1 }]).toArray();
+    res.json({
+      masCaro: data,
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'No funciona :C' });
+  }
+};
 
 module.exports = {
   getMedicamentosStock,
@@ -132,4 +181,7 @@ module.exports = {
   getVentasParacetamol,
   getMedicamentosCaducados,
   getMedicamentosVproveedor,
+  getDineroVentas,
+  getMedicamentosNoVendidos,
+  getMedicamentoCaro
 };
