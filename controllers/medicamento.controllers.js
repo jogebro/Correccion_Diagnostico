@@ -85,31 +85,44 @@ const getMedicamentosCaducados = async (req, res) => {
 };
 
 const getMedicamentosVproveedor = async (req, res) => {
-  const collection = await getCollection('Compras');
-  const data = await collection.find().toArray();
-  let totales = [0, 0, 0];
-  data.map((e) => {
-    if (e.proveedor.nombre == 'ProveedorA') {
-      totales[0] += e.medicamentosComprados[0].cantidadComprada;
-    }
-    if (e.proveedor.nombre == 'ProveedorB') {
-      totales[1] += e.medicamentosComprados[0].cantidadComprada;
-    }
-    if (e.proveedor.nombre == 'ProveedorC') {
-      totales[2] += e.medicamentosComprados[0].cantidadComprada;
-    }
-  });
-
-  const dataComprasP = [
-    { proveedorA: totales[0] }, 
-    { proveedorB: totales[1] }, 
-    { proveedorC: totales[2] }
-  ];
+  try {
+    const collection = await getCollection('Compras');
+    const data = await collection.find().toArray();
+    let totales = [0, 0, 0];
+    data.map((e) => {
+      if (e.proveedor.nombre == 'ProveedorA') {
+        totales[0] += e.medicamentosComprados[0].cantidadComprada;
+      }
+      if (e.proveedor.nombre == 'ProveedorB') {
+        totales[1] += e.medicamentosComprados[0].cantidadComprada;
+      }
+      if (e.proveedor.nombre == 'ProveedorC') {
+        totales[2] += e.medicamentosComprados[0].cantidadComprada;
+      }
+    });
   
-  res.json({
-    CantidadVendida: dataComprasP,
-  });
+    const dataComprasP = [
+      { proveedorA: totales[0] }, 
+      { proveedorB: totales[1] }, 
+      { proveedorC: totales[2] }
+    ];
+    
+    res.json({
+      CantidadVendida: dataComprasP,
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'No funciona :C' });
+  }
 };
+
+const getDineroVentas = async ()=>{
+  try {
+    
+  } catch (error) {
+    
+  }
+
+}
 
 module.exports = {
   getMedicamentosStock,
