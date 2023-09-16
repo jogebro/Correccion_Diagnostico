@@ -20,6 +20,24 @@ const {
   getVentasEmpleado,
   getMedicamentoExp,
   getEmpleadosMas5,
+  getMedicNuncaVendido,
+  getPacienteMasGasto,
+  getEmpleadoNuncaVenta,
+  getProvedorMasMedic,
+  getPacCompraParacetamol,
+  getMedicVendidosMes,
+  getEmpleadosMenos5,
+  getProvSuministraMedic,
+  getProvMedicMenos50Stock,
+  getPacienteNuncaCompro,
+  getMedicamentosMes,
+  getEmpleadoMayorCantidad,
+  getTotalGastosPaciente,
+  getMedicNoVendidos,
+  getProveedoresMasCinco,
+  getMedicamentosTrimestre,
+  getEmpleadosNoVentasAbril,
+  getMedicamentosMaxStock,
 } = require('../controllers/medicamento.controllers.js');
 const router = Router();
 
@@ -63,5 +81,41 @@ router.get('/venta-empleado', getVentasEmpleado);
 router.get('/expiran', getMedicamentoExp);
 // 20):
 router.get('/empleados-max5', getEmpleadosMas5);
+// 21):
+router.get('/nunca-vendido', getMedicNuncaVendido);
+// 22):
+router.get('/paciente-max-gasto', getPacienteMasGasto);
+// 23):
+router.get('/empleado-nunca-venta', getEmpleadoNuncaVenta);
+// 24):
+router.get('/provedor-max', getProvedorMasMedic);
+// 25):
+router.get('/compra-paracetamol', getPacCompraParacetamol);
+// 26):
+router.get('/vendidos-mes', getMedicVendidosMes);
+// 27):
+router.get('/empleados-menos5', getEmpleadosMenos5);
+// 28):
+router.get('/suministra-medic', getProvSuministraMedic);
+// 29):
+router.get('/medic-menos50-stock', getProvMedicMenos50Stock);
+// 30):
+router.get('/nunca-compro', getPacienteNuncaCompro);
+// 31):
+router.get('/medicamentos-mes', getMedicamentosMes);
+// 32):
+router.get('/empleado-mayor-cantidad', getEmpleadoMayorCantidad);
+// 33):
+router.get('/total-gastos-paciente', getTotalGastosPaciente);
+// 34):
+router.get('/medic-no-vendidos', getMedicNoVendidos);
+// 35):
+router.get('/proveedores-mas-cinco', getProveedoresMasCinco);
+// 36):
+router.get('/medicamentos-trimestre', getMedicamentosTrimestre);
+// 37):
+router.get('/empleados-no-ventas-abril', getEmpleadosNoVentasAbril);
+// 38):
+router.get('/medicamentos-max-stock', getMedicamentosMaxStock);
 
 module.exports = router;
